@@ -7,15 +7,15 @@
 // CONSTANTS
 
 #define N 4
-#define ITERATIONS 100000000
+#define ITERATIONS (2ul << 31)
 #define GRADIENT 0.5
 
 #define WIDTH 1000
 #define HEIGHT 1000
 #define CENTERX 500
-#define CENTERY 0
-#define SCALEX 100
-#define SCALEY 100
+#define CENTERY 500
+#define SCALEX 90
+#define SCALEY 90
 
 // TYPE DEFINITIONS
 
@@ -126,10 +126,10 @@ void set_function(ifs *system, int index, double a, double b, double c, double d
 
 void set_random_ifs(ifs *system, unsigned int *seed)
 {
-    set_function(system, 0, fast_rand_d(seed), fast_rand_d(seed), fast_rand_d(seed), fast_rand_d(seed), fast_rand_d(seed), fast_rand_d(seed), fast_rand_d(seed));
+    set_function(system, 0, 1 - 2 * fast_rand_d(seed), 1 - 2 * fast_rand_d(seed), 1 - 2 * fast_rand_d(seed), 1 - 2 * fast_rand_d(seed), 1 - 2 * fast_rand_d(seed), 1 - 2 * fast_rand_d(seed), fast_rand_d(seed));
 
     for (int i = 1; i < N; i++)
-        set_function(system, i, fast_rand_d(seed), fast_rand_d(seed), fast_rand_d(seed), fast_rand_d(seed), fast_rand_d(seed), fast_rand_d(seed), system->p[i - 1] + fast_rand_d(seed));
+        set_function(system, i, 1 - 2 * fast_rand_d(seed), 1 - 2 * fast_rand_d(seed), 1 - 2 * fast_rand_d(seed), 1 - 2 * fast_rand_d(seed), 1 - 2 * fast_rand_d(seed), 1 - 2 * fast_rand_d(seed), system->p[i - 1] + fast_rand_d(seed));
 }
 
 void set_ifs_example_1(ifs *system)
@@ -216,12 +216,15 @@ int main(int argc, char *argv[])
 
     // SETUP IFS SYSTEM
     ifs *system = malloc(sizeof(ifs));
-    set_ifs_example_1(system);
+    // set_ifs_example_1(system);
+    set_random_ifs(system, &(unsigned int){666});
 
     // SETUP ALIAS TABLES
     alias_preprocess(system);
 
     int screen[WIDTH * HEIGHT];
+    for (int i = 0; i < WIDTH * HEIGHT; i++)
+        screen[i] = 0;
 
     // Thread count.
     omp_set_num_threads(32);
