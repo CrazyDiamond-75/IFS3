@@ -7,7 +7,7 @@ USE_OPENMP = 1
 CC = gcc
 RM = rm -f
 
-CFLAGS = -Wall -O3 -funroll-loops -march=native -mtune=native -std=c99
+CFLAGS = -Wall -O3 -funroll-loops -march=native -mtune=native -std=c23
 LIBS   = -lm
     
 ifdef USE_OPENMP
